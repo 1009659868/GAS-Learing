@@ -12,21 +12,20 @@
 
 class UAbilitySystemComponent;
 class UAuraAttributeSet;
+class UGameplayAbility;
+
 
 UCLASS(Abstract)
-class AURA_API AAuraCharacterBase : public ACharacter , public IAbilitySystemInterface,public ICombatInterface
+class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface
 {
 	GENERATED_BODY()
 
 public:
-	
 	AAuraCharacterBase();
 	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const;
 	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
-	
 protected:
-	
 	virtual void BeginPlay() override;
 
 
@@ -38,19 +37,25 @@ protected:
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet> AttributeSet;
-	
+
 	virtual void InitAbilityActorInfo();
-	
-	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
 	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 
-	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
 	TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
 
-	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
-	
-	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass,float Level) const;
+
+	void ApplyEffectToSelf(TSubclassOf<UGameplayEffect> GameplayEffectClass, float Level) const;
 	void InitializeDefaultAttributes() const;
 	
+	//添加能力
+	void AddCharacterAbilities();
+private:
+	//启动能力
+	UPROPERTY(EditAnywhere, Category="Attributes")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 };

@@ -3,6 +3,8 @@
 
 #include "Character/AuraCharacterBase.h"
 
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+
 AAuraCharacterBase::AAuraCharacterBase()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -47,5 +49,16 @@ void AAuraCharacterBase::InitializeDefaultAttributes() const
 	ApplyEffectToSelf(DefaultPrimaryAttributes,1.f);
 	ApplyEffectToSelf(DefaultSecondaryAttributes,1.f);
 	ApplyEffectToSelf(DefaultVitalAttributes,1.f);
+}
+
+void AAuraCharacterBase::AddCharacterAbilities()
+{
+	// 如果没有服务器权限则返回
+	if (!HasAuthority()) return;
+
+	//通过AbilitySystemComponent来赋予游戏能力
+	UAuraAbilitySystemComponent* AuraASC = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent); 
+
+	AuraASC->AddCharacterAbilities(StartupAbilities);
 }
 
